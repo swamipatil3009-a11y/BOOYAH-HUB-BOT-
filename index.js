@@ -1,3 +1,16 @@
+const http = require('http');
+
+// Render Web Services require an HTTP port. This tiny health server keeps the
+// Discord bot compatible with Render's free Web Service.
+const PORT = Number(process.env.PORT) || 10000;
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('BOOYAH HUB bot is running.');
+});
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Health server listening on port ${PORT}`);
+});
+
 const { Client, GatewayIntentBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, PermissionsBitField } = require('discord.js');
 
 const TOKEN = process.env.DISCORD_TOKEN;
