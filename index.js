@@ -33,7 +33,18 @@ client.on('interactionCreate',async i=>{try{
    await i.reply({embeds:[panelEmbed()],components:[row]});
    panelMessage=await i.fetchReply();
    return}
-  if(i.commandName==='registration'){await i.reply({content:list(),ephemeral:true});return}
+  if(i.commandName==='registration'){
+   const rows=Array.from({length:12},(_,idx)=>{
+     const n=idx+1;
+     const r=registrations.get(n);
+     return r ? `🟥 Slot ${n} — **${r.team}**` : `🟩 Slot ${n} — Available`;
+   }).join('\n');
+   const embed=new EmbedBuilder()
+     .setTitle('🏆 BOOYAH HUB — REGISTERED TEAMS')
+     .setDescription(`**${registrations.size}/12 Teams Registered**\n\n${rows}`)
+     .setColor(0xF5A623);
+   await i.reply({embeds:[embed],ephemeral:true});
+   return}
   if(i.commandName==='reset-registration'){registrations.clear();await i.reply({content:'✅ Registration has been reset.',ephemeral:true});await updatePanel();return}
  }
  if(i.isButton()&&i.customId==='register_team'){if(!isOpen()){await i.reply({content:'⛔ Registration is now closed. Registration is open from 6:00 PM to 9:00 PM IST.',ephemeral:true});return}if(registrations.size>=12){await i.reply({content:'⛔ All 12 slots are full.',ephemeral:true});return}const m=new ModalBuilder().setCustomId('team_registration_modal').setTitle('BOOYAH HUB Team Registration');const f=(id,label,style=TextInputStyle.Short)=>new TextInputBuilder().setCustomId(id).setLabel(label).setStyle(style).setRequired(true);m.addComponents(new ActionRowBuilder().addComponents(f('team','Team name')),new ActionRowBuilder().addComponents(f('captain','Captain')),new ActionRowBuilder().addComponents(f('players','Players (4 main)',TextInputStyle.Paragraph)),new ActionRowBuilder().addComponents(f('substitute','Substitute')));await i.showModal(m);return}
