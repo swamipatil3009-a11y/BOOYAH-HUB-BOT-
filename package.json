@@ -1,14 +1,8 @@
 {
   "name": "booyah-hub-bot",
-  "version": "1.0.0",
-  "description": "BOOYAH HUB Discord registration bot",
+  "version": "2.0.0",
+  "description": "BOOYAH HUB daily scrim registration bot",
   "main": "index.js",
-  "scripts": {"start": "node index.js"},
-  "engines": {"node": ">=20"},
-  "dependencies": {
-    "discord.js": "^14.24.2",
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0",
-    "node-cron": "^4.2.1"
-  }
+  "scripts": { "start": "node index.js" },
+  "dependencies": { "discord.js": "^14.22.1" }
 }
