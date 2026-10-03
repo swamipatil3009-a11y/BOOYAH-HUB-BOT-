@@ -56,13 +56,15 @@ client.on(Events.InteractionCreate, async interaction => {
         return interaction.reply({ content: '✅ Registration panel posted.', ephemeral: true });
       }
       if (interaction.commandName === 'registration') {
-        if (!teams.length) return interaction.reply({ content: 'No teams registered yet.', ephemeral: true });
+        await interaction.deferReply({ ephemeral: true });
+        if (!teams.length) return interaction.editReply({ content: '📋 No teams registered yet.' });
         const list = teams.map(t => `**${t.slot}. ${t.teamName}** — Captain: ${t.captain}`).join('\n');
-        return interaction.reply({ embeds: [new EmbedBuilder().setTitle('📋 BOOYAH HUB Registrations').setDescription(list).addFields({ name: 'Total', value: `${teams.length}/${MAX_TEAMS}` })] });
+        return interaction.editReply({ embeds: [new EmbedBuilder().setTitle('📋 BOOYAH HUB Registrations').setDescription(list).addFields({ name: 'Total', value: `${teams.length}/${MAX_TEAMS}` })] });
       }
       if (interaction.commandName === 'reset-registration') {
+        await interaction.deferReply({ ephemeral: true });
         teams = [];
-        return interaction.reply({ content: '🧹 Registrations reset. No teams registered yet.' });
+        return interaction.editReply({ content: '🧹 Registrations reset. No teams registered yet.' });
       }
     }
 
