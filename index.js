@@ -11,7 +11,7 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`Health server listening on port ${PORT}`);
 });
 
-const { Client, GatewayIntentBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, PermissionsBitField } = require('discord.js');
+const { Client, GatewayIntentBits, Events, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, MessageFlags } = require('discord.js');
 
 const TOKEN = process.env.DISCORD_TOKEN;
 if (!TOKEN) { console.error('Missing DISCORD_TOKEN. Add it to your environment variables.'); process.exit(1); }
@@ -56,15 +56,13 @@ client.on(Events.InteractionCreate, async interaction => {
         return interaction.reply({ content: '✅ Registration panel posted.', ephemeral: true });
       }
       if (interaction.commandName === 'registration') {
-        await interaction.deferReply({ ephemeral: true });
-        if (!teams.length) return interaction.editReply({ content: '📋 No teams registered yet.' });
+        if (!teams.length) return interaction.reply({ content: '📋 No teams registered yet.', flags: MessageFlags.Ephemeral });
         const list = teams.map(t => `**${t.slot}. ${t.teamName}** — Captain: ${t.captain}`).join('\n');
-        return interaction.editReply({ embeds: [new EmbedBuilder().setTitle('📋 BOOYAH HUB Registrations').setDescription(list).addFields({ name: 'Total', value: `${teams.length}/${MAX_TEAMS}` })] });
+        return interaction.reply({ embeds: [new EmbedBuilder().setTitle('📋 BOOYAH HUB Registrations').setDescription(list).addFields({ name: 'Total', value: `${teams.length}/${MAX_TEAMS}` })], flags: MessageFlags.Ephemeral });
       }
       if (interaction.commandName === 'reset-registration') {
-        await interaction.deferReply({ ephemeral: true });
         teams = [];
-        return interaction.editReply({ content: '🧹 Registrations reset. No teams registered yet.' });
+        return interaction.reply({ content: '🧹 Registrations reset. No teams registered yet.', flags: MessageFlags.Ephemeral });
       }
     }
 
